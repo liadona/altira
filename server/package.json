@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "railway-setup": "cd server && npm install --omit=dev",
+    "railway-start": "cd server && npm start"
   },
   "keywords": [],
   "author": "",
