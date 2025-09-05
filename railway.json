@@ -3,10 +3,12 @@
   "build": {
     "builder": "nixpacks",
     "buildCommand": "cd server && npm install --omit=dev",
-    "outputDir": "server"
+    "outputDir": "server",
+    "baseDir": "server"
   },
   "deploy": {
-    "startCommand": "cd server && npm start",
-    "restartPolicyType": "ON_FAILURE"
+    "startCommand": "npm start",
+    "restartPolicyType": "ON_FAILURE",
+    "numReplicas": 1
   }
 }
