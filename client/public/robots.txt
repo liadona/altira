@@ -1,0 +1,6 @@
+# robots.txt for Altira
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.altira.com/sitemap.xml
