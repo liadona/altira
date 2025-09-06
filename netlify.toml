@@ -1,0 +1,10 @@
+[build]
+  base    = "client"
+  command = "npm run build"
+  publish = "dist"
+
+# Redirect untuk Single Page Application (SPA)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
