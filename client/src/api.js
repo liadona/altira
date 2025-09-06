@@ -1,5 +1,10 @@
 // client/src/api.js
-const API_URL = "http://localhost:5000/api";
+const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+fetch(`${API}/api/artikel`)
+  .then(res => res.json())
+  .then(data => console.log(data));
+
 
 export async function apiFetch(endpoint, options = {}) {
   const token = localStorage.getItem("token");
