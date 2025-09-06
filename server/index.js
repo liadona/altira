@@ -36,7 +36,12 @@ const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET;
 
 
-//const JWT_SECRET = "mysecretkey"; // nanti bisa pakai process.env.JWT_SECRET
+// ==========================
+// Healthcheck root (untuk Railway & monitoring)
+// ==========================
+app.get("/", (req, res) => {
+  res.send("✅ Altira API is running...");
+});
 
 // ==========================
 // Middleware verifikasi JWT
