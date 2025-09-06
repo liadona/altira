@@ -7,7 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon server.js",
     "railway-setup": "cd server && npm install --omit=dev",
-    "railway-start": "cd server && npm start"
+    "railway-start": "cd server && npm start",
     "db:myfarmdb": "node index.js"
   },
   "keywords": [],
