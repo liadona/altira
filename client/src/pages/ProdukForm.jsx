@@ -40,8 +40,8 @@ export default function ProdukForm({ produk, onSave = () => {}, onCancel }) {
       }
 
       const url = produk
-        ? `http://localhost:5000/api/admin/produk/${produk.id}`
-        : "http://localhost:5000/api/admin/produk";
+      ? `${API}/api/admin/produk/${produk.id}`
+      : `${API}/api/admin/produk`;
 
       const method = produk ? "PUT" : "POST";
 
