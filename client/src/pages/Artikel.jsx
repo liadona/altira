@@ -5,7 +5,7 @@ import { fetchArticles } from "../api";
 import { API_BASE } from "../api";
 
 export default function Artikel() {
-  const [artikels] = useState([]);
+  const [artikels, setArtikel] = useState([]);
 
   useEffect(() => {
   fetchArticles().then(setArtikel).catch(console.error);
