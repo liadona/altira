@@ -66,7 +66,8 @@ function authenticateToken(req, res, next) {
 // ==========================
 app.get("/api/artikel", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM artikel ORDER BY created_at DESC");
+   const result = await pool.query("SELECT * FROM public.artikel ORDER BY id DESC");
+
     res.json(result.rows);
   } catch (err) {
     console.error(err);
