@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AdSense from "../components/AdSense";
 import { fetchArticleById } from "../api";
+import { API_BASE } from "../api";
 
 function ArtikelDetail() {
   const { id } = useParams();
@@ -26,7 +27,7 @@ function ArtikelDetail() {
 
       {artikel.gambar && (
         <img
-        src={`http://localhost:5000${artikel.gambar}`}
+         src={`${API_BASE}${artikel.gambar}`}
         alt={artikel.judul}
         className="w-full h-64 object-cover rounded mb-4"
         />
