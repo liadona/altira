@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { loginAdmin } from "../api";
 
 export default function AdminLogin() {
   const [username, setUsername] = useState("");
@@ -12,11 +13,7 @@ export default function AdminLogin() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
+      const res = await loginAdmin({ username, password });
 
       if (!res.ok) {
         setError("Login gagal. Periksa username/password.");

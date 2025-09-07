@@ -2,6 +2,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+// Ambil base URL dari env
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [newUser, setNewUser] = useState({ username: "", password: "", role: "admin" });
@@ -11,7 +14,7 @@ export default function AdminUsers() {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/admin/users", {
+        const res = await axios.get(`${API_BASE}/api/admin/users`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(res.data);
@@ -27,7 +30,7 @@ export default function AdminUsers() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/admin/users", newUser, {
+      await axios.post(`${API_BASE}/api/admin/users`, newUser, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNewUser({ username: "", password: "", role: "admin" });
@@ -38,31 +41,31 @@ export default function AdminUsers() {
   };
 
   // Reset password
-const handleReset = async (id) => {
-  try {
-    const token = localStorage.getItem("token");
-    await axios.put(`http://localhost:5000/api/admin/users/${id}/reset-password`, {}, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    alert("Password berhasil direset ke default (altira123)");
-  } catch (err) {
-    console.error("Gagal reset password:", err);
-  }
-};
+  const handleReset = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(`${API_BASE}/api/admin/users/${id}/reset-password`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      alert("Password berhasil direset ke default (altira123)");
+    } catch (err) {
+      console.error("Gagal reset password:", err);
+    }
+  };
 
-// Hapus user
-const handleDelete = async (id) => {
-  if (!window.confirm("Yakin ingin menghapus user ini?")) return;
-  try {
-    const token = localStorage.getItem("token");
-    await axios.delete(`http://localhost:5000/api/admin/users/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setUsers(users.filter((u) => u.id !== id));
-  } catch (err) {
-    console.error("Gagal hapus user:", err);
-  }
-};
+  // Hapus user
+  const handleDelete = async (id) => {
+    if (!window.confirm("Yakin ingin menghapus user ini?")) return;
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_BASE}/api/admin/users/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUsers(users.filter((u) => u.id !== id));
+    } catch (err) {
+      console.error("Gagal hapus user:", err);
+    }
+  };
 
   return (
     <div>
@@ -111,9 +114,6 @@ const handleDelete = async (id) => {
               <th className="border px-3 py-2 text-left">Aksi</th>
             </tr>
           </thead>
-
-            
-
           <tbody>
             {Array.isArray(users) && users.length > 0 ? (
               users.map((u) => (
@@ -136,13 +136,13 @@ const handleDelete = async (id) => {
               ))                 
             ) : (
               <tr>
-                <td colSpan="2" className="border px-3 py-2 text-center text-gray-500">
+                <td colSpan="3" className="border px-3 py-2 text-center text-gray-500">
                   Belum ada admin
                 </td>
               </tr>
             )}
           </tbody>
-          </table>
+        </table>
       </div>
     </div>
   );

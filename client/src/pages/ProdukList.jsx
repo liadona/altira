@@ -1,13 +1,12 @@
 // client/src/pages/ProdukList.jsx
 import { useEffect, useState } from "react";
+import { fetchProducts } from "../api";
 
 export default function ProdukList() {
   const [produk, setProduk] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/produk")
-      .then((res) => res.json())
-      .then((data) => setProduk(data));
+  fetchProducts().then(setProduk).catch(console.error);
   }, []);
 
   return (
@@ -19,7 +18,7 @@ export default function ProdukList() {
         >
           {item.gambar && (
             <img
-              src={`http://localhost:5000${item.gambar}`}
+              src={`${API_BASE}${item.gambar}`}
               alt={item.nama}
               className="w-full h-48 object-cover rounded-t-xl"
             />

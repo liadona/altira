@@ -1,15 +1,15 @@
 // client/src/pages/Artikel.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { fetchArticles } from "../api";
+import { API_BASE } from "../api";
 
 export default function Artikel() {
-  const [artikels, setArtikels] = useState([]);
+  const [artikels] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/artikel")
-      .then((res) => res.json())
-      .then((data) => setArtikels(data));
-  }, []);
+  fetchArticles().then(setArtikel).catch(console.error);
+}, []);
 
   return (
     <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -20,10 +20,10 @@ export default function Artikel() {
         >
           {artikel.gambar && (
             <img
-              src={`http://localhost:5000${artikel.gambar}`}
-              alt={artikel.judul}
-              className="w-full h-48 object-cover"
-            />
+            src={`${API_BASE}${artikel.gambar}`}
+            alt={artikel.judul}
+            className="w-full h-48 object-cover"
+        />
           )}
           <div className="p-4">
             <h2 className="text-lg font-bold text-green-700 mb-2 line-clamp-2">

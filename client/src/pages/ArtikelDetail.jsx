@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AdSense from "../components/AdSense";
+import { fetchArticleById } from "../api";
 
 function ArtikelDetail() {
   const { id } = useParams();
@@ -8,19 +9,8 @@ function ArtikelDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchArtikel = async () => {
-      try {
-        const res = await fetch(`http://localhost:5000/api/artikel/${id}`);
-        const data = await res.json();
-        setArtikel(data);
-      } catch (err) {
-        console.error("Gagal ambil artikel detail:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchArtikel();
-  }, [id]);
+  fetchArticleById(id).then(setArtikel).catch(console.error);
+}, [id]);
 
   if (loading) return <p className="text-center">Loading...</p>;
   if (!artikel) return <p className="text-center text-gray-500">Artikel tidak ditemukan</p>;
