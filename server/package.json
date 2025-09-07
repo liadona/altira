@@ -10,6 +10,7 @@
     "railway-start": "cd server && npm start",
     "db:myfarmdb": "node index.js",
     "seed": "node seed.js"
+    
   },
   "keywords": [],
   "author": "",
