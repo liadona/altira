@@ -1,6 +1,8 @@
 // client/src/pages/ArtikelForm.jsx
 import { useState, useEffect } from "react";
 
+const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function ArtikelForm({ artikel, onSuccess }) {
   const [judul, setJudul] = useState(artikel?.judul || "");
   const [isi, setIsi] = useState(artikel?.isi || "");
@@ -26,14 +28,14 @@ export default function ArtikelForm({ artikel, onSuccess }) {
 
       const res = await fetch(
         artikel
-          ? `http://localhost:5000/api/admin/artikel/${artikel.id}`
-          : "http://localhost:5000/api/admin/artikel",
+          ? `${API}/api/admin/artikel/${artikel.id}`
+          : `${API}/api/admin/artikel`,
         {
           method: artikel ? "PUT" : "POST",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          body: formData, // ⬅️ penting! bukan JSON
+          body: formData, // ⬅️ jangan JSON, tapi FormData
         }
       );
 

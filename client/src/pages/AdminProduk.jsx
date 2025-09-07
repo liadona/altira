@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import ProdukForm from "./ProdukForm";
 import AdminLayout from "../components/AdminLayout";
 
+const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function AdminProduk() {
   const [produks, setProduks] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -13,9 +15,15 @@ export default function AdminProduk() {
   }, []);
 
   const fetchProduks = async () => {
-    const res = await fetch("http://localhost:5000/api/produk");
-    const data = await res.json();
-    setProduks(data);
+    try {
+      const res = await fetch(`${API}/api/produk`);
+      if (!res.ok) throw new Error("Gagal fetch produk");
+      const data = await res.json();
+      setProduks(data);
+    } catch (err) {
+      console.error("❌ Error fetch produk:", err);
+      setProduks([]); // fallback biar tidak blank putih
+    }
   };
 
   const handleEdit = (produk) => {
@@ -25,12 +33,18 @@ export default function AdminProduk() {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Yakin hapus produk ini?")) return;
-    const token = localStorage.getItem("token");
-    await fetch(`http://localhost:5000/api/admin/produk/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    fetchProduks();
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${API}/api/admin/produk/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Gagal hapus produk");
+      fetchProduks();
+    } catch (err) {
+      console.error("❌ Error delete produk:", err);
+      alert("Gagal menghapus produk");
+    }
   };
 
   return (

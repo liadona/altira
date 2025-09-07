@@ -2,6 +2,9 @@
 import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 
+const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
+export const API_BASE = API;
+
 export default function SearchResult() {
   const [artikels, setArtikels] = useState([]);
   const [produk, setProduk] = useState([]);
@@ -12,25 +15,35 @@ export default function SearchResult() {
     if (!query) return;
 
     // fetch artikel
-    fetch("http://localhost:5000/api/artikel")
+    fetch(`${API}/api/artikel`)
       .then((res) => res.json())
       .then((data) => {
-        const filtered = data.filter((a) =>
-          a.judul.toLowerCase().includes(query.toLowerCase()) ||
-          a.isi.toLowerCase().includes(query.toLowerCase())
+        const filtered = data.filter(
+          (a) =>
+            a.judul.toLowerCase().includes(query.toLowerCase()) ||
+            a.isi.toLowerCase().includes(query.toLowerCase())
         );
         setArtikels(filtered);
+      })
+      .catch((err) => {
+        console.error("Gagal fetch artikel:", err);
+        setArtikels([]);
       });
 
     // fetch produk
-    fetch("http://localhost:5000/api/produk")
+    fetch(`${API}/api/produk`)
       .then((res) => res.json())
       .then((data) => {
-        const filtered = data.filter((p) =>
-          p.nama.toLowerCase().includes(query.toLowerCase()) ||
-          p.deskripsi.toLowerCase().includes(query.toLowerCase())
+        const filtered = data.filter(
+          (p) =>
+            p.nama.toLowerCase().includes(query.toLowerCase()) ||
+            p.deskripsi.toLowerCase().includes(query.toLowerCase())
         );
         setProduk(filtered);
+      })
+      .catch((err) => {
+        console.error("Gagal fetch produk:", err);
+        setProduk([]);
       });
   }, [query]);
 
@@ -50,7 +63,9 @@ export default function SearchResult() {
             {artikels.map((artikel) => (
               <div key={artikel.id} className="bg-white rounded shadow p-4">
                 <h3 className="font-bold text-green-700">{artikel.judul}</h3>
-                <p className="text-sm text-gray-600 line-clamp-2">{artikel.isi}</p>
+                <p className="text-sm text-gray-600 line-clamp-2">
+                  {artikel.isi}
+                </p>
                 <Link
                   to={`/artikel/${artikel.id}`}
                   className="text-green-600 text-sm hover:underline"
@@ -74,13 +89,15 @@ export default function SearchResult() {
               <div key={item.id} className="bg-white rounded shadow p-4">
                 {item.gambar && (
                   <img
-                    src={`http://localhost:5000${item.gambar}`}
+                    src={`${API_BASE}${item.gambar}`}
                     alt={item.nama}
                     className="w-full h-40 object-cover rounded"
                   />
                 )}
                 <h3 className="font-bold text-green-700 mt-2">{item.nama}</h3>
-                <p className="text-sm text-gray-600 line-clamp-2">{item.deskripsi}</p>
+                <p className="text-sm text-gray-600 line-clamp-2">
+                  {item.deskripsi}
+                </p>
                 <p className="font-semibold text-green-700">Rp {item.harga}</p>
                 {item.jenis === "internal" ? (
                   <a

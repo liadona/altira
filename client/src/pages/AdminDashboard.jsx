@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import ArtikelForm from "./ArtikelForm";
 import AdminLayout from "../components/AdminLayout";
 
+const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function AdminDashboard() {
   const [artikels, setArtikels] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -13,9 +15,15 @@ export default function AdminDashboard() {
   }, []);
 
   const fetchArtikels = async () => {
-    const res = await fetch("http://localhost:5000/api/artikel");
-    const data = await res.json();
-    setArtikels(data);
+    try {
+      const res = await fetch(`${API}/api/artikel`);
+      if (!res.ok) throw new Error("Gagal fetch artikel");
+      const data = await res.json();
+      setArtikels(data);
+    } catch (err) {
+      console.error("❌ Error fetch artikel:", err);
+      setArtikels([]); // fallback biar ga blank putih
+    }
   };
 
   const handleEdit = (artikel) => {
@@ -25,14 +33,20 @@ export default function AdminDashboard() {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Yakin ingin menghapus artikel ini?")) return;
-    const token = localStorage.getItem("token");
-    await fetch(`http://localhost:5000/api/admin/artikel/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    fetchArtikels();
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${API}/api/admin/artikel/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error("Gagal hapus artikel");
+      fetchArtikels();
+    } catch (err) {
+      console.error("❌ Error delete artikel:", err);
+      alert("Gagal menghapus artikel");
+    }
   };
 
   return (
