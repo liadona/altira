@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { API_BASE } from "../api";   // 🔥 pakai base API dari api.js
 
 function Input({ label, type, value, onChange }) {
   const [shown, setShown] = useState(false);
@@ -12,11 +13,11 @@ function Input({ label, type, value, onChange }) {
         value={value}
         onChange={onChange}
         required
-        autoComplete="off"   // 🔥 cegah autofill aneh
+        autoComplete="off"
         className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
       />
       <button
-        type="button"        // 🔥 pastikan tidak trigger submit
+        type="button"
         onClick={() => setShown(!shown)}
         className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-gray-500"
       >
@@ -43,7 +44,7 @@ export default function ChangePassword() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.put(
-        "http://localhost:5000/api/admin/change-password",
+        `${API_BASE}/api/admin/change-password`,   // 🔥 sudah dinamis
         { oldPassword, newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );
